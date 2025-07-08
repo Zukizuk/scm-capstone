@@ -15,6 +15,7 @@ variable "lake_bucket_name" {
 variable "rds_password" {
   type        = string
   description = "The password for the RDS database."
+  sensitive   = true
 }
 
 variable "rds_endpoint" {
