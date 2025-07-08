@@ -11,3 +11,14 @@ variable "account_id" {
 variable "lake_bucket_name" {
   type = string
 }
+
+variable "rds_password" {
+  type        = string
+  description = "The password for the RDS database."
+}
+
+variable "rds_endpoint" {
+  type        = string
+  description = "The endpoint of the RDS instance to connect to."
+
+}
