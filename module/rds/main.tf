@@ -9,11 +9,6 @@ resource "aws_db_instance" "default" {
   publicly_accessible = true
 }
 
-
-output "rds_endpoint" {
-  value = aws_db_instance.default.endpoint
-}
-
 variable "rds_password" {
   type        = string
   description = "The password for the RDS database."

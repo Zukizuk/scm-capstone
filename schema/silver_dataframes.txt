@@ -1,0 +1,98 @@
+[INFO] Schema: products_df
+root
+ |-- id: long (nullable = true)
+ |-- created_at: timestamp (nullable = true)
+ |-- updated_at: timestamp (nullable = true)
+ |-- description: string (nullable = true)
+ |-- name: string (nullable = true)
+ |-- price: decimal(19,2) (nullable = true)
+ |-- sku: string (nullable = true)
+
+[INFO] Schema: category_df
+root
+ |-- category_id: string (nullable = true)
+ |-- category_description: string (nullable = true)
+ |-- category_name: string (nullable = true)
+
+[INFO] Schema: locations_df
+root
+ |-- id: long (nullable = true)
+ |-- created_at: timestamp (nullable = true)
+ |-- updated_at: timestamp (nullable = true)
+ |-- address: string (nullable = true)
+ |-- contact_email: string (nullable = true)
+ |-- contact_person: string (nullable = true)
+ |-- contact_phone: string (nullable = true)
+ |-- name: string (nullable = true)
+
+[INFO] Schema: suppliers_df
+root
+ |-- supplier_id: string (nullable = true)
+ |-- company_name: string (nullable = true)
+ |-- status: string (nullable = true)
+ |-- supplier_address: string (nullable = true)
+ |-- supplier_city: string (nullable = true)
+ |-- supplier_country: string (nullable = true)
+ |-- supplier_description: string (nullable = true)
+ |-- supplier_email: string (nullable = true)
+ |-- supplier_name: string (nullable = true)
+ |-- supplier_phone_number: string (nullable = true)
+ |-- supplier_zip_code: string (nullable = true)
+ |-- category_id: string (nullable = true)
+
+[INFO] Schema: statuses_df
+root
+ |-- id: long (nullable = true)
+ |-- created_at: timestamp (nullable = true)
+ |-- updated_at: timestamp (nullable = true)
+ |-- description: string (nullable = true)
+ |-- is_active: boolean (nullable = true)
+ |-- name: string (nullable = true)
+
+[INFO] Schema: transactions_df
+root
+ |-- id: long (nullable = true)
+ |-- created_at: timestamp (nullable = true)
+ |-- updated_at: timestamp (nullable = true)
+ |-- quantity: integer (nullable = true)
+ |-- received_by: string (nullable = true)
+ |-- supplier: string (nullable = true)
+ |-- inventory_id: long (nullable = true)
+ |-- transaction_type_id: long (nullable = true)
+
+[INFO] Schema: inventory_df
+root
+ |-- id: long (nullable = true)
+ |-- created_at: timestamp (nullable = true)
+ |-- updated_at: timestamp (nullable = true)
+ |-- damaged_quantity: integer (nullable = true)
+ |-- quantity: integer (nullable = true)
+ |-- location_id: long (nullable = true)
+ |-- product_id: long (nullable = true)
+ |-- status_id: long (nullable = true)
+
+[INFO] Schema: damages_df
+root
+ |-- id: long (nullable = true)
+ |-- created_at: timestamp (nullable = true)
+ |-- updated_at: timestamp (nullable = true)
+ |-- description: string (nullable = true)
+ |-- estimated_loss_value: decimal(19,2) (nullable = true)
+ |-- inspection_date: date (nullable = true)
+ |-- quantity: integer (nullable = true)
+ |-- reason: string (nullable = true)
+ |-- report_number: string (nullable = true)
+ |-- inventory_id: long (nullable = true)
+ |-- location_id: long (nullable = true)
+ |-- status_id: long (nullable = true)
+
+[INFO] Schema: metrics_df
+root
+ |-- id: string (nullable = true)
+ |-- month: integer (nullable = true)
+ |-- on_time_delivery: integer (nullable = true)
+ |-- quality_score: integer (nullable = true)
+ |-- record_date: date (nullable = true)
+ |-- responsiveness: integer (nullable = true)
+ |-- year: integer (nullable = true)
+ |-- supplier_id: string (nullable = true)
