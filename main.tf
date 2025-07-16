@@ -19,14 +19,6 @@ module "glue" {
 
 module "redshift" {
   source = "./module/redshift"
-
-  kms_key_id = var.kms_key_id
-
-}
-
-import {
-  to = aws_redshift_cluster.myprodcluster
-  id = "redshift-cluster"
 }
 
 import {
@@ -37,4 +29,9 @@ import {
 import {
   to = aws_glue_job.Transform_Load_to_Silver
   id = "TransformAndLoadToSilver"
+}
+
+import {
+  to = aws_redshift_cluster.redshift_cluster
+  id = "redshift-cluster-1"
 }

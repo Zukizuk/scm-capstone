@@ -5,7 +5,7 @@
 resource "aws_glue_job" "LoadToGold" {
   connections = []
   default_arguments = {
-    "--TempDir"                      = "s3://aws-glue-assets-448049788660-eu-west-1/temporary/"
+    "--TempDir"                      = "s3://aws-glue-assets-${var.account_id}-eu-west-1/temporary/"
     "--enable-glue-datacatalog"      = "true"
     "--enable-job-insights"          = "true"
     "--enable-metrics"               = "true"
@@ -13,7 +13,7 @@ resource "aws_glue_job" "LoadToGold" {
     "--enable-spark-ui"              = "true"
     "--job-bookmark-option"          = "job-bookmark-disable"
     "--job-language"                 = "python"
-    "--spark-event-logs-path"        = "s3://aws-glue-assets-448049788660-eu-west-1/sparkHistoryLogs/"
+    "--spark-event-logs-path"        = "s3://aws-glue-assets-${var.account_id}-eu-west-1/sparkHistoryLogs/"
   }
   description               = null
   execution_class           = "STANDARD"
@@ -25,7 +25,7 @@ resource "aws_glue_job" "LoadToGold" {
   name                      = "LoadToGold"
   non_overridable_arguments = {}
   region                    = "eu-west-1"
-  role_arn                  = "arn:aws:iam::448049788660:role/GlueRole"
+  role_arn                  = "arn:aws:iam::${var.account_id}:role/GlueRole"
   security_configuration    = null
   tags                      = {}
   tags_all                  = {}
@@ -34,7 +34,7 @@ resource "aws_glue_job" "LoadToGold" {
     name            = "glueetl"
     python_version  = "3"
     runtime         = null
-    script_location = "s3://aws-glue-assets-448049788660-eu-west-1/scripts/LoadToGold.py"
+    script_location = "s3://aws-glue-assets-${var.account_id}-eu-west-1/scripts/LoadToGold.py"
   }
   execution_property {
     max_concurrent_runs = 1
@@ -44,7 +44,7 @@ resource "aws_glue_job" "LoadToGold" {
 resource "aws_glue_job" "Transform_Load_to_Silver" {
   connections = []
   default_arguments = {
-    "--TempDir"                      = "s3://aws-glue-assets-448049788660-eu-west-1/temporary/"
+    "--TempDir"                      = "s3://aws-glue-assets-${var.account_id}-eu-west-1/temporary/"
     "--enable-glue-datacatalog"      = "true"
     "--enable-job-insights"          = "true"
     "--enable-metrics"               = "true"
@@ -52,7 +52,7 @@ resource "aws_glue_job" "Transform_Load_to_Silver" {
     "--enable-spark-ui"              = "true"
     "--job-bookmark-option"          = "job-bookmark-disable"
     "--job-language"                 = "python"
-    "--spark-event-logs-path"        = "s3://aws-glue-assets-448049788660-eu-west-1/sparkHistoryLogs/"
+    "--spark-event-logs-path"        = "s3://aws-glue-assets-${var.account_id}-eu-west-1/sparkHistoryLogs/"
   }
   description               = null
   execution_class           = "STANDARD"
@@ -64,7 +64,7 @@ resource "aws_glue_job" "Transform_Load_to_Silver" {
   name                      = "TransformAndLoadToSilver"
   non_overridable_arguments = {}
   region                    = "eu-west-1"
-  role_arn                  = "arn:aws:iam::448049788660:role/GlueRole"
+  role_arn                  = "arn:aws:iam::${var.account_id}:role/GlueRole"
   security_configuration    = null
   tags                      = {}
   tags_all                  = {}
@@ -73,7 +73,7 @@ resource "aws_glue_job" "Transform_Load_to_Silver" {
     name            = "glueetl"
     python_version  = "3"
     runtime         = null
-    script_location = "s3://aws-glue-assets-448049788660-eu-west-1/scripts/TransformAndLoadToSilver.py"
+    script_location = "s3://aws-glue-assets-${var.account_id}-eu-west-1/scripts/TransformAndLoadToSilver.py"
   }
   execution_property {
     max_concurrent_runs = 1
