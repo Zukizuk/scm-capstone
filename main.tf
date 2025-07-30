@@ -18,20 +18,21 @@ module "glue" {
 }
 
 module "redshift" {
-  source = "./module/redshift"
+  source     = "./module/redshift"
+  account_id = var.account_id
 }
 
-import {
-  to = aws_glue_job.LoadToGold
-  id = "LoadToGold"
-}
+# import {
+#   to = aws_glue_job.LoadToGold
+#   id = "LoadToGold"
+# }
 
-import {
-  to = aws_glue_job.Transform_Load_to_Silver
-  id = "TransformAndLoadToSilver"
-}
+# import {
+#   to = aws_glue_job.Transform_Load_to_Silver
+#   id = "TransformAndLoadToSilver"
+# }
 
-import {
-  to = aws_redshift_cluster.redshift_cluster
-  id = "redshift-cluster-1"
-}
+# import {
+#   to = aws_redshift_cluster.redshift_cluster
+#   id = "redshift-cluster-1"
+# }
