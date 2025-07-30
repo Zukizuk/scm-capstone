@@ -33,7 +33,7 @@ resource "aws_glue_job" "ingest_job" {
     "--RDS_DB_NAME"                  = "mydb"
     "--RDS_USERNAME"                 = "postgres"
     "--RDS_PASSWORD"                 = var.rds_password
-    "--S3_OUTPUT_BUCKET"             = "capstone-bucket-zuki"
+    "--S3_OUTPUT_BUCKET"             = "your-bucket"
   }
 
   non_overridable_arguments = {}

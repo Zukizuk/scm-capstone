@@ -20,7 +20,6 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   enhanced_vpc_routing                 = false
   final_snapshot_identifier            = null
   iam_roles                            = ["arn:aws:iam::${var.account_id}:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655"]
-  kms_key_id                           = "AWS_OWNED_KMS_KEY"
   maintenance_track_name               = "current"
   manage_master_password               = null
   manual_snapshot_retention_period     = -1
