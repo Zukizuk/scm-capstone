@@ -16,3 +16,22 @@ module "glue" {
   rds_endpoint = var.rds_endpoint
   rds_password = var.rds_password
 }
+
+module "redshift" {
+  source = "./module/redshift"
+}
+
+import {
+  to = aws_glue_job.LoadToGold
+  id = "LoadToGold"
+}
+
+import {
+  to = aws_glue_job.Transform_Load_to_Silver
+  id = "TransformAndLoadToSilver"
+}
+
+import {
+  to = aws_redshift_cluster.redshift_cluster
+  id = "redshift-cluster-1"
+}
