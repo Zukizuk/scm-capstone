@@ -8,7 +8,21 @@
       "Parameters": {
         "JobName": "IngestRDSDataToS3"
       },
-      "Next": "TransformAndLoadToSilver"
+      "Next": "TransformAndLoadToSilver",
+      "Retry": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "BackoffRate": 2,
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "Next": "SNS Publish Failure"
+        }
+      ]
     },
     "TransformAndLoadToSilver": {
       "Type": "Task",
@@ -16,7 +30,13 @@
       "Parameters": {
         "JobName": "TransformAndLoadToSilver"
       },
-      "Next": "LoadToGold"
+      "Next": "LoadToGold",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "Next": "SNS Publish Failure"
+        }
+      ]
     },
     "LoadToGold": {
       "Type": "Task",
@@ -24,7 +44,13 @@
       "Parameters": {
         "JobName": "LoadToGold"
       },
-      "Next": "Export_Gold_to_Parquet"
+      "Next": "Export_Gold_to_Parquet",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "Next": "SNS Publish Failure"
+        }
+      ]
     },
     "Export_Gold_to_Parquet": {
       "Type": "Task",
@@ -32,7 +58,13 @@
       "Parameters": {
         "JobName": "Export_Gold_to_Parquet"
       },
-      "Next": "BatchExecuteStatement"
+      "Next": "BatchExecuteStatement",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "Next": "SNS Publish Failure"
+        }
+      ]
     },
     "BatchExecuteStatement": {
       "Type": "Task",
@@ -42,16 +74,34 @@
         "ClusterIdentifier": "redshift-cluster-1",
         "DbUser": "awsuser",
         "Sqls": [
-          "COPY public.gold_dim_category FROM 's3://your-bucket/export/gold_dim_category/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;",
-          "COPY public.gold_dim_product FROM 's3://your-bucket/export/gold_dim_product/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;",
-          "COPY public.gold_dim_location FROM 's3://your-bucket/export/gold_dim_location/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;",
-          "COPY public.gold_dim_supplier FROM 's3://your-bucket/export/gold_dim_supplier/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;",
-          "COPY public.gold_dim_status FROM 's3://your-bucket/export/gold_dim_status/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;",
-          "COPY public.gold_fact_inventory_transactions FROM 's3://your-bucket/export/gold_fact_inventory_transactions/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;",
-          "COPY public.gold_fact_inventory_snapshot FROM 's3://your-bucket/export/gold_fact_inventory_snapshot/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;",
-          "COPY public.gold_fact_damage_reports FROM 's3://your-bucket/export/gold_fact_damage_reports/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;",
-          "COPY public.gold_fact_supplier_performance FROM 's3://your-bucket/export/gold_fact_supplier_performance/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/role_name' FORMAT AS PARQUET;"
+          "COPY public.gold_dim_category FROM 's3://your-bucket/export/gold_dim_category/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;",
+          "COPY public.gold_dim_product FROM 's3://your-bucket/export/gold_dim_product/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;",
+          "COPY public.gold_dim_location FROM 's3://your-bucket/export/gold_dim_location/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;",
+          "COPY public.gold_dim_supplier FROM 's3://your-bucket/export/gold_dim_supplier/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;",
+          "COPY public.gold_dim_status FROM 's3://your-bucket/export/gold_dim_status/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;",
+          "COPY public.gold_fact_inventory_transactions FROM 's3://your-bucket/export/gold_fact_inventory_transactions/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;",
+          "COPY public.gold_fact_inventory_snapshot FROM 's3://your-bucket/export/gold_fact_inventory_snapshot/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;",
+          "COPY public.gold_fact_damage_reports FROM 's3://your-bucket/export/gold_fact_damage_reports/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;",
+          "COPY public.gold_fact_supplier_performance FROM 's3://your-bucket/export/gold_fact_supplier_performance/' IAM_ROLE 'arn:aws:iam::account-id:role/service-role/AmazonRedshift-CommandsAccessRole-20250711T180655' FORMAT AS PARQUET;"
         ]
+      },
+      "Next": "SNS Publish Success"
+    },
+    "SNS Publish Failure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "arn:aws:sns:eu-west-1:account-id:ecommerce-pipeline-alerts",
+        "Message.$": "$"
+      },
+      "Next": "SNS Publish Success"
+    },
+    "SNS Publish Success": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "arn:aws:sns:eu-west-1:account-id:ecommerce-pipeline-alerts",
+        "Message.$": "$"
       },
       "End": true
     }
