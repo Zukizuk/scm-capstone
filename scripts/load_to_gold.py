@@ -41,7 +41,7 @@ spark.sparkContext._conf.setAll(conf.getAll())
 
 # Configuration
 catalog_db = "capstone_glue_database"
-gold_s3_bucket = "s3://capstone-bucket-zuki/gold/"
+gold_s3_bucket = "s3://your-bucket/gold/"
 today = datetime.today().date()
 
 def read_glue_table(glue_context, db, tbl):
